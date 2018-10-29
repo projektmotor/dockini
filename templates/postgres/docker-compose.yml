@@ -1,0 +1,10 @@
+  postgres:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - %%PROJECT_NAME_HYPHENIZED%%
+    restart: always
+    environment:
+      POSTGRES_DB:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:

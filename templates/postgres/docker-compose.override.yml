@@ -1,0 +1,5 @@
+  postgres:
+    build:
+      context: ./postgres
+    ports:
+    - ${OUTER_POSTGRES_PORT}:5432

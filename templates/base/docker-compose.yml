@@ -1,0 +1,25 @@
+version: "3"
+services:
+
+  web:
+    env_file: .env
+    hostname: ${PROJECT_NAME}
+    networks:
+      - %%PROJECT_NAME_HYPHENIZED%%
+    tty: true
+    restart: always
+    depends_on:
+      %%DEPENDS_ON_MYSQL%%
+      %%DEPENDS_ON_POSTGRES%%
+
+%%MYSQL%%
+
+%%POSTGRES%%
+
+volumes:
+  %%VOLUMES_MYSQL%%
+  %%VOLUMES_POSTGRES%%
+
+networks:
+  %%PROJECT_NAME_HYPHENIZED%%:
+    driver: bridge
