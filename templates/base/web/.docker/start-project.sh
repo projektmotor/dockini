@@ -33,16 +33,21 @@ fi
 if [ "${APP_ENVIRONMENT}" = "dev" ]; then
     SYMFONY_ENV=${APP_ENVIRONMENT} composer self-update
     SYMFONY_ENV=${APP_ENVIRONMENT} composer install
+    php bin/console cache:clear
+    yarn encore dev --watch > /var/www/html/var/log/encore.log 2>&1 &
+
+    chown -R $CONTAINER_USER:$CONTAINER_GROUP /home/docker
+    chown -R $CONTAINER_USER:$CONTAINER_GROUP /var/www/html
 elif [ "${APP_ENVIRONMENT}" = "test" ]; then
     php bin/console doctrine:schema:update --force
     php bin/console hautelook:fixtures:load --no-interaction
+    php bin/console cache:clear
     # need to use APP_ENV=${APP_ENVIRONMENT} ?
 else
     php bin/console doctrine:database:create --if-not-exists --no-interaction
     php bin/console doctrine:migrations:migrate --no-interaction
+    php bin/console cache:clear
 fi
-
-php bin/console cache:clear
 
 # notice: this should be done after composer-tasks, otherwise composer-task
 #         could run with enabled xdebug (endless script execution!)
@@ -57,12 +62,6 @@ else
 
     sed -i -e "s/xdebug\.remote_host.*/xdebug.remote_host=$PHP_XDEBUG_REMOTE_HOST/g" /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     sed -i -e 's/;zend_extension/zend_extension/g'                                   /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-fi
-
-if [ "${APP_ENVIRONMENT}" != "dev" ]; then
-    yarn encore production
-else
-    yarn encore dev --watch > /var/www/html/var/log/encore.log 2>&1 &
 fi
 
 ##############################################################
