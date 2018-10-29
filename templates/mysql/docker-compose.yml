@@ -7,6 +7,6 @@
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD:
-      MYSQL_DATABASE:
-      MYSQL_USER:
       MYSQL_PASSWORD:
+      MYSQL_DATABASE: %%PROJECT_NAME%%
+      MYSQL_USER:  %%PROJECT_NAME%%

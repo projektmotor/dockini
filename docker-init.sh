@@ -25,7 +25,7 @@ function read_input() {
       number=$RANDOM
       let "number %= $RANGE"  # Scales $number down within $RANGE.
       mod=${number}
-      let "mod %= 20"  # Scales $number down within steps of 20.
+      let "mod %= 100"  # Scales $number down within steps of 20.
       let "number -= $mod"
     done
     RANDOM_PORTRANGE_START=${number}
@@ -68,8 +68,19 @@ function remove_from_file () {
     mv /tmp/Dockerfile2 $1
 }
 
+function add_yarn() {
+    echo add yarn
+    replace_in_file "templates/yarn/web/Dockerfile" "build/web/Dockerfile" "%%YARN%%"
+}
+
+function add_xdebug() {
+    echo add xdebug
+    replace_in_file "templates/xdebug/web/Dockerfile" "build/web/Dockerfile" "%%XDEBUG%%"
+}
+
 function handle_cron() {
     if [ "${WITH_CRON}" = "y" ]; then
+        echo with cron
 
         mkdir -p build/web/.docker/etc/cron.d/
         cp templates/cron/web/.docker/etc/cron.d/* build/web/.docker/etc/cron.d/
@@ -77,6 +88,7 @@ function handle_cron() {
         replace_in_file "templates/cron/web/Dockerfile" "build/web/Dockerfile" "%%CRON%%"
         replace_in_file "templates/cron/web/.docker/start-project.sh" "build/web/.docker/start-project.sh" "%%CRON%%"
     else
+        echo no cron
         remove_from_file "build/web/.docker/start-project.sh" "%%CRON%%"
         remove_from_file "build/web/Dockerfile" "%%CRON%%"
     fi
@@ -118,6 +130,7 @@ function handle_mysql() {
     if [ "${WITH_MYSQL,,}" = "n" ]; then
         echo no mysql
         remove_from_file "build/web/Dockerfile" "%%MYSQL%%"
+        remove_from_file "build/web/.docker/start-project.sh" "%%MYSQL%%"
         remove_from_file "build/web/.env" "%%MYSQL%%"
         remove_from_file "build/docker-compose.yml" "%%MYSQL%%"
         remove_from_file "build/docker-compose.live.yml" "%%MYSQL%%"
@@ -131,6 +144,7 @@ function handle_mysql() {
     else
         echo with mysql
         replace_in_file "templates/mysql/web/Dockerfile" "build/web/Dockerfile" "%%MYSQL%%"
+        replace_in_file "templates/mysql/web/.docker/start-project.sh" "build/web/.docker/start-project.sh" "%%MYSQL%%"
         replace_in_file "templates/mysql/web/.env" "build/web/.env" "%%MYSQL%%"
         replace_in_file "templates/mysql/docker-compose.yml" "build/docker-compose.yml" "%%MYSQL%%"
         replace_in_file "templates/mysql/docker-compose.live.yml" "build/docker-compose.live.yml" "%%MYSQL%%"
@@ -212,6 +226,9 @@ function main() {
     read_input
 
     set_ports_vars
+
+    add_yarn
+    add_xdebug
 
     handle_cron
     handle_postgres

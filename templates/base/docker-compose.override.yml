@@ -4,21 +4,21 @@ services:
   web:
     build:
       context: web
+      args:
+        APP_ENVIRONMENT: 'dev'
+    environment:
+      APP_ENVIRONMENT: 'dev'
+      CONTAINER_USER: docker
+      CONTAINER_GROUP: docker
+      HOST_UID: ${HOST_UID}
+      HOST_GID: ${HOST_GID}
+      PHP_XDEBUG_ENABLED: 0
     volumes:
     - .:/var/www/html
 #    - ${APACHE_LOG_DIR}:/var/log/apache2/
 #    - ${SYMFONY_LOG_DIR}:/var/www/html/var/log/
-#    - ${BACKUP_DIR}:/var/www/html/var/backups/
     ports:
     - ${OUTER_WEB_PORT}:80
-#    - "8080:8080"
-#    - "4445:4445"
-#    environment:
-#      HOST_UID: ${HOST_UID} # set in ~/.bashrc
-#      HOST_GID: ${HOST_GID} # set in ~/.bashrc
-#      CONTAINER_USER: docker
-#      CONTAINER_GROUP: docker
-#      OUTER_WEB_PORT: ${OUTER_WEB_PORT}
 
 %%MYSQL%%
 

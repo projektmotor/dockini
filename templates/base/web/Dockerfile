@@ -16,6 +16,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 %%MYSQL%%
 
+%%YARN%%
+
+%%XDEBUG%%
+
 #RUN apt-get update && apt-get install -y \
 #        wget \
 #        netcat \
@@ -24,7 +28,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 #        libjpeg-dev \
 #        libpng-dev \
 #        libssl-dev \
-#        git-core \
 #        acl
 #
 #
@@ -39,10 +42,18 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 #        docker-php-ext-install bcmath && \
 #        docker-php-ext-install intl
 
-COPY .docker /usr/local/etc/php/
+COPY .docker /
+#COPY .docker /usr/local/etc/php/
 
-#RUN pecl install zip
+##############################################################
+# COMPOSER INIT
+##############################################################
 
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    git-core
+
+RUN pecl install zip
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 ## https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
@@ -55,7 +66,7 @@ COPY composer.json composer.lock symfony.lock /var/www/html/
 COPY src/Kernel.php /var/www/html/src/
 
 RUN cd /var/www/html; \
-        composer install --optimize-autoloader
+        composer install --optimize-autoloader --no-scripts
 
 COPY package.json yarn.lock /var/www/html/
 RUN yarn install
@@ -67,23 +78,13 @@ ARG APP_ENVIRONMENT=prod
 ENV APP_ENVIRONMENT=${APP_ENVIRONMENT}
 ENV APACHE_LOG_NAME=${PROJECT_NAME}_${APP_ENVIRONMENT}
 
-###RUN SYMFONY_ENV=$APP_ENVIRONMENT composer symfony-scripts
-##
 RUN if [ "$APP_ENVIRONMENT" != "dev" ]; then \
         node_modules/.bin/encore production; \
     fi
 
-COPY .docker /
-# start can be removed
-#COPY .docker /etc/apache2/.htpasswd
-#COPY .docker /etc/apache2/sites-enabled/
-# end can be removed
-
 RUN a2enmod rewrite
 RUN a2enmod headers
 
-
-#COPY .docker/apache-php /
 COPY .docker/start-project.sh /start-project.sh
 
 #EXPOSE 80
