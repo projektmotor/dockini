@@ -14,7 +14,7 @@ services:
       HOST_GID: ${HOST_GID}
       PHP_XDEBUG_ENABLED: 0
     volumes:
-    - .:/var/www/html
+    - ./web/:/var/www/html
 #    - ${APACHE_LOG_DIR}:/var/log/apache2/
 #    - ${SYMFONY_LOG_DIR}:/var/www/html/var/log/
     ports:
