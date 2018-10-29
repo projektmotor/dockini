@@ -42,9 +42,6 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 #        docker-php-ext-install bcmath && \
 #        docker-php-ext-install intl
 
-COPY .docker /
-#COPY .docker /usr/local/etc/php/
-
 ##############################################################
 # COMPOSER INIT
 ##############################################################
@@ -61,6 +58,8 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /home/docker/.composer
 ## contains dev-mode packages
 RUN composer global require "hirak/prestissimo:^0.3" "sllh/composer-versions-check:^2.0" "pyrech/composer-changelogs:^1.5" --prefer-dist --no-progress --no-suggest --classmap-authoritative
+
+COPY .docker /
 
 COPY composer.json composer.lock symfony.lock /var/www/html/
 COPY src/Kernel.php /var/www/html/src/
