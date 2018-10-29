@@ -2,7 +2,7 @@ version: "3"
 services:
 
   web:
-    image: docker-hub.intranet.projektmotor.de/${PROJECT-NAME}-test:latest
+    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME}-test:latest
     ports:
       - "%%OUTER_WEB_PORT_TEST%%:80"
     volumes:
@@ -18,4 +18,4 @@ services:
       MYSQL_PASSWORD:
 
   postgres:
-    image: docker-hub.intranet.projektmotor.de/${PROJECT-NAME}-postgres-test:latest
+    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME}-postgres-test:latest

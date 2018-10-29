@@ -18,4 +18,4 @@ services:
       MYSQL_PASSWORD:
 
   postgres:
-    image: docker-hub.intranet.projektmotor.de/${PROJECT-NAME}-postgres-stage:latest
+    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME}-postgres-stage:latest
