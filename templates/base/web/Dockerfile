@@ -69,7 +69,8 @@ RUN cd /var/www/html; \
         composer install --optimize-autoloader --no-scripts
 
 COPY package.json yarn.lock /var/www/html/
-RUN yarn install
+RUN cd /var/www/html; \
+        yarn install
 
 WORKDIR /var/www/html
 COPY . /var/www/html
