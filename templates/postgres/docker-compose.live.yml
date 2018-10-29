@@ -1,2 +1,2 @@
   postgres:
-    image: docker-hub.intranet.projektmotor.de/${PROJECT-NAME}-postgres-live:latest
+    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME}-postgres-live:latest

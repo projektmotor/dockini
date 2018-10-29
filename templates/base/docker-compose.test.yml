@@ -17,5 +17,4 @@ services:
       MYSQL_USER:
       MYSQL_PASSWORD:
 
-  postgres:
-    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME}-postgres-test:latest
+%%POSTGRES%%
