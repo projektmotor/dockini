@@ -33,11 +33,11 @@ function read_input() {
 
     if [ "${PORTRANGE_START}" = "" ]; then
         PORTRANGE_START=${RANDOM_PORTRANGE_START}
-    elif [ "${PORTRANGE_START}" < 1023 ]; then
+    elif [ "${PORTRANGE_START}" -lt 1024 ]; then
         echo "PORTRANGE_START have to be larger than 1023"
         exit
-    elif [ "${PORTRANGE_START}" > 65535 ]; then
-        echo "PORTRANGE_START have to be lower than 65535"
+    elif [ "${PORTRANGE_START}" -gt 65510 ]; then
+        echo "PORTRANGE_START have to be lower than 65511"
         exit
     fi
 
