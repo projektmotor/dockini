@@ -78,6 +78,11 @@ function add_xdebug() {
     replace_in_file "templates/xdebug/web/Dockerfile" "build/web/Dockerfile" "%%XDEBUG%%"
 }
 
+function add_panther() {
+    echo add xdebug
+    replace_in_file "templates/xdebug/web/Dockerfile" "build/web/Dockerfile" "%%PANTHER%%"
+}
+
 function handle_cron() {
     if [ "${WITH_CRON}" = "y" ]; then
         echo with cron
@@ -229,6 +234,7 @@ function main() {
 
     add_yarn
     add_xdebug
+    add_panther
 
     handle_cron
     handle_postgres
