@@ -33,20 +33,19 @@ fi
 if [ "${APP_ENVIRONMENT}" = "dev" ]; then
     SYMFONY_ENV=${APP_ENVIRONMENT} composer self-update
     SYMFONY_ENV=${APP_ENVIRONMENT} composer install
-    php bin/console cache:clear
+    php bin/console cache:clear --env=dev
     yarn encore dev --watch > /var/www/html/var/log/encore.log 2>&1 &
 
     chown -R $CONTAINER_USER:$CONTAINER_GROUP /home/docker
     chown -R $CONTAINER_USER:$CONTAINER_GROUP /var/www/html
 elif [ "${APP_ENVIRONMENT}" = "test" ]; then
-    php bin/console doctrine:schema:update --force
-    php bin/console hautelook:fixtures:load --no-interaction
-    php bin/console cache:clear
-    # need to use APP_ENV=${APP_ENVIRONMENT} ?
+    php bin/console doctrine:schema:update --force --env=test
+    php bin/console hautelook:fixtures:load --no-interaction --env=test
+    php bin/console cache:clear --env=test
 else
-    php bin/console doctrine:database:create --if-not-exists --no-interaction
-    php bin/console doctrine:migrations:migrate --no-interaction
-    php bin/console cache:clear
+    php bin/console doctrine:database:create --if-not-exists --no-interaction --env=prod
+    php bin/console doctrine:migrations:migrate --no-interaction --env=prod
+    php bin/console cache:clear --env=prod
 fi
 
 # notice: this should be done after composer-tasks, otherwise composer-task
