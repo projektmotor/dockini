@@ -20,6 +20,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 %%XDEBUG%%
 
+RUN pecl install zip
+
+RUN echo "extension=zip.so"  >> /usr/local/etc/php/conf.d/zip.ini
+
 #RUN apt-get update && apt-get install -y \
 #        wget \
 #        netcat \
@@ -49,8 +53,6 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     git-core
-
-RUN pecl install zip
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 ## https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
