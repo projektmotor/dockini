@@ -4,7 +4,7 @@ services:
   web:
     image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME}-test:latest
     ports:
-      - "%%OUTER_WEB_PORT_TEST%%:80"
+      - "%%OUTER_WEB_PORT_TEST%%:443"
     volumes:
       - /var/log/apache/:/var/log/apache2/
       - /var/log/php/:/var/www/html/var/log/

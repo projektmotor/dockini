@@ -10,6 +10,18 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+RUN a2enmod rewrite
+RUN a2enmod headers
+RUN a2enmod ssl
+
+# Use this self-generated certificate only in dev, IT IS NOT SECURE!
+RUN openssl genrsa -des3 -passout pass:NotSecure -out cert.pass.key 2048
+RUN openssl rsa -passin pass:NotSecure -in cert.pass.key -out /etc/ssl/private/cert.key
+RUN rm cert.pass.key
+RUN openssl req -new -passout pass:NotSecure -key /etc/ssl/private/cert.key -out /etc/ssl/private/cert.csr \
+    -subj '/C=SS/ST=SS/L=Entenhausen/O=Dockini Dev/CN=localhost'
+RUN openssl x509 -req -sha256 -days 365 -in /etc/ssl/private/cert.csr -signkey /etc/ssl/private/cert.key -out /etc/ssl/private/cert.crt
+
 %%CRON%%
 
 %%POSTGRES%%
@@ -88,9 +100,6 @@ ENV APACHE_LOG_NAME=${PROJECT_NAME}_${APP_ENVIRONMENT}
 RUN if [ "$APP_ENVIRONMENT" != "dev" ]; then \
         node_modules/.bin/encore production; \
     fi
-
-RUN a2enmod rewrite
-RUN a2enmod headers
 
 COPY .docker/start-project.sh /start-project.sh
 
