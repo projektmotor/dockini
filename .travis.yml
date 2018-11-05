@@ -7,4 +7,10 @@ env:
 script:
   - bash ./docker-init.sh -c y -p y -m y -e n -n my_nice_acme_project -r 9100
   - cd build && docker-compose build
-  - ls -l
+  - cd ..
+  - bash ./docker-init.sh -c n -p n -m y -e n -n my_nice_acme_project -r 9200
+  - cd build && docker-compose build
+  - cd ..
+  - bash ./docker-init.sh -c y -p y -m n -e n -n my_nice_acme_project -r 9300
+  - cd build && docker-compose build
+  - cd ..
