@@ -1,11 +1,36 @@
 #!/usr/bin/env bash
 
+while getopts c:p:e:m:n:r: option
+do
+case "${option}"
+in
+c) WITH_CRON=${OPTARG};;
+p) WITH_POSTGRES=${OPTARG};;
+e) WITH_ES=${OPTARG};;
+m) WITH_MYSQL=${OPTARG};;
+n) PROJECT_NAME=${OPTARG};;
+r) PORTRANGE_START=$OPTARG;;
+esac
+done
+
 function read_input() {
-    read -p 'Use cron [y|N]: ' WITH_CRON
-    read -p 'Use postgres [y|N]: ' WITH_POSTGRES
-    read -p 'Use mysql [Y|n]: ' WITH_MYSQL
-    read -p 'Use elastic search [y|N]: ' WITH_ES
-    read -p 'PROJECT_NAME [my_nice_project]: ' PROJECT_NAME
+
+    echo ${WITH_CRON}
+    if [ "${WITH_CRON}" = "" ]; then
+        read -p 'Use cron (c) [y|N]: ' WITH_CRON
+    fi
+    if [ "${WITH_POSTGRES}" = "" ]; then
+        read -p 'Use postgres (p) [y|N]: ' WITH_POSTGRES
+    fi
+    if [ "${WITH_MYSQL}" = "" ]; then
+        read -p 'Use mysql (m) [Y|n]: ' WITH_MYSQL
+    fi
+    if [ "${WITH_ES}" = "" ]; then
+        read -p 'Use elastic search (e) [y|N]: ' WITH_ES
+    fi
+    if [ "${PROJECT_NAME}" = "" ]; then
+        read -p 'PROJECT_NAME (n) [my_nice_project]: ' PROJECT_NAME
+    fi
 
     if [ "${PROJECT_NAME}" = "" ]; then
         PROJECT_NAME=my_nice_project
@@ -29,7 +54,9 @@ function read_input() {
       let "number -= $mod"
     done
     RANDOM_PORTRANGE_START=${number}
-    read -p "PORTRANGE_START [${RANDOM_PORTRANGE_START}]: " PORTRANGE_START
+    if [ "${PORTRANGE_START}" = "" ]; then
+        read -p "PORTRANGE_START (r) [${RANDOM_PORTRANGE_START}]: " PORTRANGE_START
+    fi
 
     if [ "${PORTRANGE_START}" = "" ]; then
         PORTRANGE_START=${RANDOM_PORTRANGE_START}
@@ -246,6 +273,7 @@ function main() {
     execute_docker_compose
 
     # TODO write next steps e.g. edit crontab
+    exit 0
 }
 
 main
