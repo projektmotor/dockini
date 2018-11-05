@@ -107,7 +107,7 @@ function add_xdebug() {
 
 function add_panther() {
     echo add xdebug
-    replace_in_file "templates/xdebug/web/Dockerfile" "build/web/Dockerfile" "%%PANTHER%%"
+    replace_in_file "templates/panther/web/Dockerfile" "build/web/Dockerfile" "%%PANTHER%%"
 }
 
 function handle_cron() {
