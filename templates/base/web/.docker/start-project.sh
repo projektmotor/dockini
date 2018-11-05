@@ -42,10 +42,16 @@ elif [ "${APP_ENVIRONMENT}" = "test" ]; then
     php bin/console doctrine:schema:update --force --env=test
     php bin/console hautelook:fixtures:load --no-interaction --env=test
     php bin/console cache:clear --env=test
+
+    # workaround: fix permission cause var/cache folder belongs till now to user root and not to www:data
+    chown -R www-data:www-data var/*
 else
     php bin/console doctrine:database:create --if-not-exists --no-interaction --env=prod
     php bin/console doctrine:migrations:migrate --no-interaction --env=prod
     php bin/console cache:clear --env=prod
+
+    # workaround: fix permission cause var/cache folder belongs till now to user root and not to www:data
+    chown -R www-data:www-data var/*
 fi
 
 # notice: this should be done after composer-tasks, otherwise composer-task
