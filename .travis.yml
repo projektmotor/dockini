@@ -1,0 +1,4 @@
+language: generic
+
+after_success: |
+  bash ./docker-init.sh -c y -p y -m y -e n -n my_nice_acme_project -r 9100
