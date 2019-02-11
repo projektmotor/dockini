@@ -1,4 +1,4 @@
-FROM composer:1.7 as composer
+FROM composer:1.8 as composer
 FROM php:7.2-apache
 
 ENV PROJECT_NAME=%%PROJECT_NAME%%
