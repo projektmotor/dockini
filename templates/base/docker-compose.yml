@@ -16,9 +16,12 @@ services:
 
 %%POSTGRES%%
 
+%%ELASTICSEARCH%%
+
 volumes:
   %%VOLUMES_MYSQL%%
   %%VOLUMES_POSTGRES%%
+  %%VOLUMES_ELASTICSEARCH%%
 
 networks:
   %%PROJECT_NAME_HYPHENIZED%%:

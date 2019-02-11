@@ -192,11 +192,14 @@ function handle_mysql() {
 
 function handle_es() {
     if [ "${WITH_ES}" = "y" ]; then
-        echo with es - no handling yet
-#        replace_in_file "templates/mysql/Dockerfile" "build/mysql/Dockerfile" "%%CRON%%"
+        echo handling elastic search
+
+        replace_in_file "templates/elasticsearch/docker-compose.yml" "build/docker-compose.yml" "%%ELASTICSEARCH%%"
+
+        VOLUMES_ELASTICSEARCH="elasticsearch_data:"
     else
         echo no es - no handling yet
-#        remove_from_file "build/web/Dockerfile" "%%MYSQL%%"
+        remove_from_file "build/docker-compose.yml" "%%ELASTICSEARCH%%"
     fi
 }
 
@@ -239,6 +242,7 @@ function replace_project_names() {
             replace_word_in_file "${DEPENDS_ON_POSTGRES}" "$I" "%%DEPENDS_ON_POSTGRES%%"
             replace_word_in_file "${VOLUMES_MYSQL}" "$I" "%%VOLUMES_MYSQL%%"
             replace_word_in_file "${VOLUMES_POSTGRES}" "$I" "%%VOLUMES_POSTGRES%%"
+            replace_word_in_file "${VOLUMES_ELASTICSEARCH}" "$I" "%%VOLUMES_ELASTICSEARCH%%"
         done
 
 }
