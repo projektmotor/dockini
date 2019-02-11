@@ -34,7 +34,6 @@ if [ "${APP_ENVIRONMENT}" = "dev" ]; then
     SYMFONY_ENV=${APP_ENVIRONMENT} composer self-update
     SYMFONY_ENV=${APP_ENVIRONMENT} composer install
     php bin/console cache:clear --env=dev
-    yarn encore dev --watch > /var/www/html/var/log/encore.log 2>&1 &
 
     chown -R $CONTAINER_USER:$CONTAINER_GROUP /home/docker
     chown -R $CONTAINER_USER:$CONTAINER_GROUP /var/www/html
