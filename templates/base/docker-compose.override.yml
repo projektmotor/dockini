@@ -17,8 +17,6 @@ services:
       PHP_XDEBUG_ENABLED: 0
     volumes:
     - ./web/:/var/www/html
-#    - ${APACHE_LOG_DIR}:/var/log/apache2/
-#    - ${SYMFONY_LOG_DIR}:/var/www/html/var/log/
     ports:
     - ${OUTER_WEB_PORT}:443
 

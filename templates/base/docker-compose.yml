@@ -2,7 +2,8 @@ version: "3"
 services:
 
   web:
-    env_file: .env
+    env_file:
+        - ./.env.stage
     hostname: ${PROJECT_NAME}
     networks:
       - %%PROJECT_NAME_HYPHENIZED%%

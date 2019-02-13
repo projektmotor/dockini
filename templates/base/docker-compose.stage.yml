@@ -2,13 +2,12 @@ version: "3"
 services:
 
   web:
-    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME_HYPHENIZED}-stage:latest
+    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}:latest
     ports:
       - "%%OUTER_WEB_PORT_STAGE%%:443"
     volumes:
-      - /var/log/apache/:/var/log/apache2/
-      - /var/log/php/:/var/www/html/var/log/
-      - /var/log/php/:/var/www/html/var/backups/
+      - /var/apps/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}/web/apache-logs/:/var/log/apache2/
+      - /var/apps/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}/web/symfony-logs/:/var/www/html/var/log/
     environment:
       APP_ENVIRONMENT: 'prod'
       DEPLOY_ENVIRONMENT: 'stage'
