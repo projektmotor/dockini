@@ -2,7 +2,7 @@ version: "3"
 services:
 
   web:
-    image: docker-hub.intranet.projektmotor.de/${PROJECT-NAME}-live:latest
+    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME_HYPHENIZED}-live:latest
     ports:
       - "%%OUTER_WEB_PORT_LIVE%%:443"
     volumes:
