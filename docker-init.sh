@@ -172,7 +172,6 @@ function handle_mysql() {
         remove_from_file "build/.env" "%%MYSQL%%"
 
         DEPENDS_ON_MYSQL=""
-        VOLUMES_MYSQL=""
     else
         echo with mysql
         replace_in_file "templates/mysql/web/Dockerfile" "build/web/Dockerfile" "%%MYSQL%%"
@@ -186,7 +185,6 @@ function handle_mysql() {
         replace_in_file "templates/mysql/.env" "build/.env" "%%MYSQL%%"
 
         DEPENDS_ON_MYSQL="- mysql"
-        VOLUMES_MYSQL="mysql_data:"
     fi
 }
 
@@ -240,9 +238,13 @@ function replace_project_names() {
             replace_word_in_file "${OUTER_WEB_PORT_LIVE}" "$I" "%%OUTER_WEB_PORT_LIVE%%"
             replace_word_in_file "${DEPENDS_ON_MYSQL}" "$I" "%%DEPENDS_ON_MYSQL%%"
             replace_word_in_file "${DEPENDS_ON_POSTGRES}" "$I" "%%DEPENDS_ON_POSTGRES%%"
-            replace_word_in_file "${VOLUMES_MYSQL}" "$I" "%%VOLUMES_MYSQL%%"
             replace_word_in_file "${VOLUMES_POSTGRES}" "$I" "%%VOLUMES_POSTGRES%%"
             replace_word_in_file "${VOLUMES_ELASTICSEARCH}" "$I" "%%VOLUMES_ELASTICSEARCH%%"
+            if [ "${VOLUMES_POSTGRES}" = "" ] && [ "${VOLUMES_ELASTICSEARCH}" = "" ]; then
+                replace_word_in_file "" "$I" "%%VOLUMES%%"
+            else
+                replace_word_in_file "volumes:" "$I" "%%VOLUMES%%"
+            fi
         done
 
 }
@@ -252,6 +254,7 @@ function execute_docker_compose() {
     cd build
 
     docker-compose --file docker-compose.yml --file docker-compose.override.yml config
+    docker-compose --file docker-compose.stage.yml --file docker-compose.yml config
     # docker-compose --file docker-compose.yml --file docker-compose.override.yml up --build -d --remove-orphans
     # docker-compose --file docker-compose.yml --file docker-compose.override.yml exec web tail -f /var/log/cron.log
     # docker build --file build/Dockerfile .

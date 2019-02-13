@@ -17,8 +17,7 @@ services:
 
 %%ELASTICSEARCH%%
 
-volumes:
-  %%VOLUMES_MYSQL%%
+%%VOLUMES%%
   %%VOLUMES_POSTGRES%%
   %%VOLUMES_ELASTICSEARCH%%
 
