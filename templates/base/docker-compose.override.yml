@@ -5,9 +5,11 @@ services:
     build:
       context: web
       args:
-        APP_ENVIRONMENT: 'dev'
+        APP_ENVIRONMENT: ${APP_ENVIRONMENT}
+        DEPLOY_ENVIRONMENT: ${DEPLOY_ENVIRONMENT}
     environment:
-      APP_ENVIRONMENT: 'dev'
+      APP_ENVIRONMENT: ${APP_ENVIRONMENT}
+      DEPLOY_ENVIRONMENT: ${DEPLOY_ENVIRONMENT}
       CONTAINER_USER: docker
       CONTAINER_GROUP: docker
       HOST_UID: ${HOST_UID}

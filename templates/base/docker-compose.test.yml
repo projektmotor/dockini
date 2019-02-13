@@ -11,6 +11,7 @@ services:
       - /var/log/php/:/var/www/html/var/backups/
     environment:
       APP_ENVIRONMENT: 'test'
+      DEPLOY_ENVIRONMENT: 'test'
       PHP_XDEBUG_ENABLED: 0
       MYSQL_HOST:
       MYSQL_DATABASE:
