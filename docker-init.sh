@@ -267,8 +267,8 @@ function execute_docker_compose() {
 
     docker-compose --file docker-compose.yml --file docker-compose.override.yml config
 
-    cp .env.stage .env
-    docker-compose --file docker-compose.stage.yml --file docker-compose.yml config
+#    cp .env.stage .env
+#    docker-compose --file docker-compose.stage.yml --file docker-compose.yml config
     # docker-compose --file docker-compose.yml --file docker-compose.override.yml up --build -d --remove-orphans
     # docker-compose --file docker-compose.yml --file docker-compose.override.yml exec web tail -f /var/log/cron.log
     # docker build --file build/Dockerfile .
