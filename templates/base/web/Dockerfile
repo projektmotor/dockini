@@ -1,7 +1,9 @@
 FROM composer:1.8 as composer
 FROM php:7.2-apache
 
-ENV PROJECT_NAME=%%PROJECT_NAME%%
+ARG PROJECT_NAME
+ARG APP_ENVIRONMENT
+ARG DEPLOY_ENVIRONMENT
 
 # replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -93,10 +95,6 @@ RUN cd /var/www/html; \
 WORKDIR /var/www/html
 COPY . /var/www/html
 
-ARG APP_ENVIRONMENT=prod
-ARG DEPLOY_ENVIRONMENT=live
-ENV APP_ENVIRONMENT=${APP_ENVIRONMENT}
-ENV DEPLOY_ENVIRONMENT=${DEPLOY_ENVIRONMENT}
 ENV APACHE_LOG_NAME=${PROJECT_NAME}_${DEPLOY_ENVIRONMENT}
 
 RUN if [ "$APP_ENVIRONMENT" != "dev" ]; then \
@@ -104,9 +102,6 @@ RUN if [ "$APP_ENVIRONMENT" != "dev" ]; then \
     fi
 
 COPY .docker/start-project.sh /start-project.sh
-
-#EXPOSE 80
-#EXPOSE 443
 
 # clear apt-cache for smaller docker images
 RUN apt-get clean -y

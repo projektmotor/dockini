@@ -9,8 +9,6 @@ services:
       - /var/apps/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}/web/apache-logs/:/var/log/apache2/
       - /var/apps/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}/web/symfony-logs/:/var/www/html/var/log/
     environment:
-      APP_ENVIRONMENT: 'prod'
-      DEPLOY_ENVIRONMENT: 'stage'
       PHP_XDEBUG_ENABLED: 0
       MYSQL_HOST:
       MYSQL_DATABASE:
