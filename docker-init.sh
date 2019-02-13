@@ -136,6 +136,9 @@ function handle_postgres() {
         replace_in_file "templates/postgres/docker-compose.stage.yml" "build/docker-compose.stage.yml" "%%POSTGRES%%"
         replace_in_file "templates/postgres/docker-compose.test.yml" "build/docker-compose.test.yml" "%%POSTGRES%%"
         replace_in_file "templates/postgres/.env" "build/.env" "%%POSTGRES%%"
+        replace_in_file "templates/postgres/.env.live" "build/.env.live" "%%POSTGRES%%"
+        replace_in_file "templates/postgres/.env.stage" "build/.env.stage" "%%POSTGRES%%"
+        replace_in_file "templates/postgres/.env.test" "build/.env.test" "%%POSTGRES%%"
 
         mkdir -p build/postgres/
         cp templates/postgres/postgres/Dockerfile build/postgres/Dockerfile
@@ -152,6 +155,9 @@ function handle_postgres() {
         remove_from_file "build/docker-compose.stage.yml" "%%POSTGRES%%"
         remove_from_file "build/docker-compose.test.yml" "%%POSTGRES%%"
         remove_from_file "build/.env" "%%POSTGRES%%"
+        remove_from_file "build/.env.live" "%%POSTGRES%%"
+        remove_from_file "build/.env.stage" "%%POSTGRES%%"
+        remove_from_file "build/.env.test" "%%POSTGRES%%"
 
         DEPENDS_ON_POSTGRES=""
         VOLUMES_POSTGRES=""
@@ -170,6 +176,9 @@ function handle_mysql() {
         remove_from_file "build/docker-compose.stage.yml" "%%MYSQL%%"
         remove_from_file "build/docker-compose.test.yml" "%%MYSQL%%"
         remove_from_file "build/.env" "%%MYSQL%%"
+        remove_from_file "build/.env.live" "%%MYSQL%%"
+        remove_from_file "build/.env.stage" "%%MYSQL%%"
+        remove_from_file "build/.env.test" "%%MYSQL%%"
 
         DEPENDS_ON_MYSQL=""
     else
@@ -183,6 +192,9 @@ function handle_mysql() {
         replace_in_file "templates/mysql/docker-compose.stage.yml" "build/docker-compose.stage.yml" "%%MYSQL%%"
         replace_in_file "templates/mysql/docker-compose.test.yml" "build/docker-compose.test.yml" "%%MYSQL%%"
         replace_in_file "templates/mysql/.env" "build/.env" "%%MYSQL%%"
+        replace_in_file "templates/mysql/.env.live" "build/.env.live" "%%MYSQL%%"
+        replace_in_file "templates/mysql/.env.stage" "build/.env.stage" "%%MYSQL%%"
+        replace_in_file "templates/mysql/.env.test" "build/.env.test" "%%MYSQL%%"
 
         DEPENDS_ON_MYSQL="- mysql"
     fi
@@ -254,6 +266,8 @@ function execute_docker_compose() {
     cd build
 
     docker-compose --file docker-compose.yml --file docker-compose.override.yml config
+
+    cp .env.stage .env
     docker-compose --file docker-compose.stage.yml --file docker-compose.yml config
     # docker-compose --file docker-compose.yml --file docker-compose.override.yml up --build -d --remove-orphans
     # docker-compose --file docker-compose.yml --file docker-compose.override.yml exec web tail -f /var/log/cron.log
