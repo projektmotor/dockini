@@ -41,7 +41,7 @@ function read_input() {
     echo ${PROJECT_NAME_HYPHENIZED}
 
 
-    # calculate starting port number in steps of 20
+    # calculate starting port number in steps of 100
     RANGE=12080 # max port is at 65535
     FLOOR=8100  # up to 1023 are privileged ports
     number=0   #initialize
@@ -50,7 +50,7 @@ function read_input() {
       number=$RANDOM
       let "number %= $RANGE"  # Scales $number down within $RANGE.
       mod=${number}
-      let "mod %= 100"  # Scales $number down within steps of 20.
+      let "mod %= 100"  # Scales $number down within steps of 100.
       let "number -= $mod"
     done
     RANDOM_PORTRANGE_START=${number}
