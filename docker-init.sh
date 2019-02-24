@@ -106,7 +106,7 @@ function add_xdebug() {
 }
 
 function add_panther() {
-    echo add xdebug
+    echo add panther
     replace_in_file "templates/panther/web/Dockerfile" "build/web/Dockerfile" "%%PANTHER%%"
 }
 
