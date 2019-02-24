@@ -1,9 +1,8 @@
 FROM composer:1.8 as composer
 FROM php:7.2-apache
 
-ARG PROJECT_NAME
 ARG APP_ENVIRONMENT
-ARG DEPLOY_ENVIRONMENT
+ENV APP_ENVIRONMENT=${APP_ENVIRONMENT}
 
 # replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
