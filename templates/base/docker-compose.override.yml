@@ -4,19 +4,23 @@ services:
   web:
     build:
       context: web
+      args:
+        APP_ENVIRONMENT: 'dev'
     environment:
-      APP_ENVIRONMENT:
-      DEPLOY_ENVIRONMENT:
       CONTAINER_USER: docker
       CONTAINER_GROUP: docker
       HOST_UID: ${HOST_UID}
       HOST_GID: ${HOST_GID}
-      PHP_XDEBUG_ENABLED: 0
+      PHP_XDEBUG_ENABLED: ${PHP_XDEBUG_ENABLED}
     volumes:
-    - ./web/:/var/www/html
+      - ./web/:/var/www/html
+      - ./web/data/apache-logs/:/var/log/apache2/
+      - ./web/data/symfony-logs/:/var/www/html/var/log/
     ports:
-    - ${OUTER_WEB_PORT}:443
+      - ${OUTER_WEBPACK_PORT}:${OUTER_WEBPACK_PORT}
 
 %%MYSQL%%
 
 %%POSTGRES%%
+
+%%ELASTICSEARCH%%

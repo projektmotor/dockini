@@ -1,0 +1,3 @@
+  elasticsearch:
+    ports:
+      - ${OUTER_ELASTICSEARCH_PORT}:9200

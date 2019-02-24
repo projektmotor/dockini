@@ -1,3 +1,5 @@
   mysql:
+    volumes:
+      - ./mysql/data/:/var/lib/mysql/
     ports:
-    - ${OUTER_MYSQL_PORT}:3306
+      - ${OUTER_MYSQL_PORT}:3306

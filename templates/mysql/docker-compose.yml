@@ -1,7 +1,7 @@
   mysql:
     image: mysql:5.7
     volumes:
-      - ./mysql/data/:/var/lib/mysql/
+      - /var/apps/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}/mysql/data/:/var/lib/mysql/
     networks:
       - %%PROJECT_NAME_HYPHENIZED%%
     restart: always

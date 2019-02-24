@@ -131,10 +131,7 @@ function handle_postgres() {
         replace_in_file "templates/postgres/web/Dockerfile" "build/web/Dockerfile" "%%POSTGRES%%"
         replace_in_file "templates/postgres/web/.env" "build/web/.env" "%%POSTGRES%%"
         replace_in_file "templates/postgres/docker-compose.yml" "build/docker-compose.yml" "%%POSTGRES%%"
-        replace_in_file "templates/postgres/docker-compose.live.yml" "build/docker-compose.live.yml" "%%POSTGRES%%"
         replace_in_file "templates/postgres/docker-compose.override.yml" "build/docker-compose.override.yml" "%%POSTGRES%%"
-        replace_in_file "templates/postgres/docker-compose.stage.yml" "build/docker-compose.stage.yml" "%%POSTGRES%%"
-        replace_in_file "templates/postgres/docker-compose.test.yml" "build/docker-compose.test.yml" "%%POSTGRES%%"
         replace_in_file "templates/postgres/.env" "build/.env" "%%POSTGRES%%"
         replace_in_file "templates/postgres/.env.live" "build/.env.live" "%%POSTGRES%%"
         replace_in_file "templates/postgres/.env.stage" "build/.env.stage" "%%POSTGRES%%"
@@ -144,23 +141,18 @@ function handle_postgres() {
         cp templates/postgres/postgres/Dockerfile build/postgres/Dockerfile
 
         DEPENDS_ON_POSTGRES="- postgres"
-        VOLUMES_POSTGRES="postgres_data:"
     else
         echo no postgres
         remove_from_file "build/web/Dockerfile" "%%POSTGRES%%"
         remove_from_file "build/web/.env" "%%POSTGRES%%"
         remove_from_file "build/docker-compose.yml" "%%POSTGRES%%"
-        remove_from_file "build/docker-compose.live.yml" "%%POSTGRES%%"
         remove_from_file "build/docker-compose.override.yml" "%%POSTGRES%%"
-        remove_from_file "build/docker-compose.stage.yml" "%%POSTGRES%%"
-        remove_from_file "build/docker-compose.test.yml" "%%POSTGRES%%"
         remove_from_file "build/.env" "%%POSTGRES%%"
         remove_from_file "build/.env.live" "%%POSTGRES%%"
         remove_from_file "build/.env.stage" "%%POSTGRES%%"
         remove_from_file "build/.env.test" "%%POSTGRES%%"
 
         DEPENDS_ON_POSTGRES=""
-        VOLUMES_POSTGRES=""
     fi
 }
 
@@ -171,10 +163,7 @@ function handle_mysql() {
         remove_from_file "build/web/.docker/start-project.sh" "%%MYSQL%%"
         remove_from_file "build/web/.env" "%%MYSQL%%"
         remove_from_file "build/docker-compose.yml" "%%MYSQL%%"
-        remove_from_file "build/docker-compose.live.yml" "%%MYSQL%%"
         remove_from_file "build/docker-compose.override.yml" "%%MYSQL%%"
-        remove_from_file "build/docker-compose.stage.yml" "%%MYSQL%%"
-        remove_from_file "build/docker-compose.test.yml" "%%MYSQL%%"
         remove_from_file "build/.env" "%%MYSQL%%"
         remove_from_file "build/.env.live" "%%MYSQL%%"
         remove_from_file "build/.env.stage" "%%MYSQL%%"
@@ -187,10 +176,7 @@ function handle_mysql() {
         replace_in_file "templates/mysql/web/.docker/start-project.sh" "build/web/.docker/start-project.sh" "%%MYSQL%%"
         replace_in_file "templates/mysql/web/.env" "build/web/.env" "%%MYSQL%%"
         replace_in_file "templates/mysql/docker-compose.yml" "build/docker-compose.yml" "%%MYSQL%%"
-        replace_in_file "templates/mysql/docker-compose.live.yml" "build/docker-compose.live.yml" "%%MYSQL%%"
         replace_in_file "templates/mysql/docker-compose.override.yml" "build/docker-compose.override.yml" "%%MYSQL%%"
-        replace_in_file "templates/mysql/docker-compose.stage.yml" "build/docker-compose.stage.yml" "%%MYSQL%%"
-        replace_in_file "templates/mysql/docker-compose.test.yml" "build/docker-compose.test.yml" "%%MYSQL%%"
         replace_in_file "templates/mysql/.env" "build/.env" "%%MYSQL%%"
         replace_in_file "templates/mysql/.env.live" "build/.env.live" "%%MYSQL%%"
         replace_in_file "templates/mysql/.env.stage" "build/.env.stage" "%%MYSQL%%"
@@ -205,11 +191,19 @@ function handle_es() {
         echo handling elastic search
 
         replace_in_file "templates/elasticsearch/docker-compose.yml" "build/docker-compose.yml" "%%ELASTICSEARCH%%"
+        replace_in_file "templates/elasticsearch/docker-compose.override.yml" "build/docker-compose.override.yml" "%%ELASTICSEARCH%%"
+        replace_in_file "templates/elasticsearch/.env" "build/.env" "%%ELASTICSEARCH%%"
 
         VOLUMES_ELASTICSEARCH="elasticsearch_data:"
+        DEPENDS_ON_ELASTICSEARCH="- elasticsearch"
     else
         echo no es - no handling yet
+
         remove_from_file "build/docker-compose.yml" "%%ELASTICSEARCH%%"
+        remove_from_file "build/docker-compose.override.yml" "%%ELASTICSEARCH%%"
+        remove_from_file "build/.env" "%%ELASTICSEARCH%%"
+
+        DEPENDS_ON_ELASTICSEARCH=""
     fi
 }
 
@@ -225,7 +219,8 @@ function set_ports_vars() {
     OUTER_WEB_PORT=$((PORTRANGE_START+0))
     OUTER_MYSQL_PORT=$((PORTRANGE_START+1))
     OUTER_POSTGRES_PORT=$((PORTRANGE_START+2))
-    OUTER_ES_PORT=$((PORTRANGE_START+3))
+    OUTER_ELASTICSEARCH_PORT=$((PORTRANGE_START+3))
+    OUTER_WEBPACK_PORT=$((PORTRANGE_START+4))
     OUTER_WEB_PORT_TEST=$((PORTRANGE_START+10))
     OUTER_WEB_PORT_STAGE=$((PORTRANGE_START+11))
     OUTER_WEB_PORT_LIVE=$((PORTRANGE_START+12))
@@ -244,15 +239,16 @@ function replace_project_names() {
             replace_word_in_file "${OUTER_WEB_PORT}" "$I" "%%OUTER_WEB_PORT%%"
             replace_word_in_file "${OUTER_MYSQL_PORT}" "$I" "%%OUTER_MYSQL_PORT%%"
             replace_word_in_file "${OUTER_POSTGRES_PORT}" "$I" "%%OUTER_POSTGRES_PORT%%"
-            replace_word_in_file "${OUTER_ES_PORT}" "$I" "%%OUTER_ES_PORT%%"
+            replace_word_in_file "${OUTER_ELASTICSEARCH_PORT}" "$I" "%%OUTER_ELASTICSEARCH_PORT%%"
+            replace_word_in_file "${OUTER_WEBPACK_PORT}" "$I" "%%OUTER_WEBPACK_PORT%%"
             replace_word_in_file "${OUTER_WEB_PORT_TEST}" "$I" "%%OUTER_WEB_PORT_TEST%%"
             replace_word_in_file "${OUTER_WEB_PORT_STAGE}" "$I" "%%OUTER_WEB_PORT_STAGE%%"
             replace_word_in_file "${OUTER_WEB_PORT_LIVE}" "$I" "%%OUTER_WEB_PORT_LIVE%%"
             replace_word_in_file "${DEPENDS_ON_MYSQL}" "$I" "%%DEPENDS_ON_MYSQL%%"
             replace_word_in_file "${DEPENDS_ON_POSTGRES}" "$I" "%%DEPENDS_ON_POSTGRES%%"
-            replace_word_in_file "${VOLUMES_POSTGRES}" "$I" "%%VOLUMES_POSTGRES%%"
+            replace_word_in_file "${DEPENDS_ON_ELASTICSEARCH}" "$I" "%%DEPENDS_ON_ELASTICSEARCH%%"
             replace_word_in_file "${VOLUMES_ELASTICSEARCH}" "$I" "%%VOLUMES_ELASTICSEARCH%%"
-            if [ "${VOLUMES_POSTGRES}" = "" ] && [ "${VOLUMES_ELASTICSEARCH}" = "" ]; then
+            if [ "${VOLUMES_ELASTICSEARCH}" = "" ]; then
                 replace_word_in_file "" "$I" "%%VOLUMES%%"
             else
                 replace_word_in_file "volumes:" "$I" "%%VOLUMES%%"

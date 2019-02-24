@@ -1,10 +1,11 @@
   postgres:
+    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME_HYPHENIZED}-postgres-${DEPLOY_ENVIRONMENT}:latest
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - /var/apps/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}/postgres/data/:/var/lib/mysql/
     networks:
       - %%PROJECT_NAME_HYPHENIZED%%
     restart: always
     environment:
-      POSTGRES_DB:
-      POSTGRES_USER:
+      POSTGRES_DB: %%PROJECT_NAME%%
+      POSTGRES_USER: %%PROJECT_NAME%%
       POSTGRES_PASSWORD:

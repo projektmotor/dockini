@@ -1,5 +1,7 @@
   postgres:
     build:
       context: ./postgres
+    volumes:
+      - ./mysql/data/:/var/lib/mysql/
     ports:
-    - ${OUTER_POSTGRES_PORT}:5432
+      - ${OUTER_POSTGRES_PORT}:5432

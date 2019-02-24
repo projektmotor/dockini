@@ -2,14 +2,26 @@ version: "3"
 services:
 
   web:
+    image: docker-hub.intranet.projektmotor.de/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}:latest
+    env_file: .env
+    environment:
+      DEPLOY_ENVIRONMENT:
+      PHP_XDEBUG_ENABLED: 0
+      # MYSQL ENV PARAMS
     hostname: ${PROJECT_NAME}
     networks:
       - %%PROJECT_NAME_HYPHENIZED%%
+    volumes:
+      - /var/apps/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}/web/apache-logs/:/var/log/apache2/
+      - /var/apps/${PROJECT_NAME_HYPHENIZED}-${DEPLOY_ENVIRONMENT}/web/symfony-logs/:/var/www/html/var/log/
     tty: true
     restart: always
     depends_on:
       %%DEPENDS_ON_MYSQL%%
       %%DEPENDS_ON_POSTGRES%%
+      %%DEPENDS_ON_ELASTICSEARCH%%
+    ports:
+      - ${OUTER_WEB_PORT}:443
 
 %%MYSQL%%
 
@@ -18,7 +30,6 @@ services:
 %%ELASTICSEARCH%%
 
 %%VOLUMES%%
-  %%VOLUMES_POSTGRES%%
   %%VOLUMES_ELASTICSEARCH%%
 
 networks:
