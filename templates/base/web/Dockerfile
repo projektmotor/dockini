@@ -40,8 +40,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN pecl install zip
 
-RUN echo "extension=zip.so"  >> /usr/local/etc/php/conf.d/zip.ini
-
 #RUN apt-get update && apt-get install -y \
 #        wget \
 #        netcat \
