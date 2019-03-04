@@ -35,12 +35,20 @@ RUN openssl x509 -req -sha256 -days 365 -in /etc/ssl/private/cert.csr -signkey /
 
 %%PANTHER%%
 
+##############################################################
+# PECL zip
+##############################################################
+
 RUN apt-get update && apt-get install -y \
     libzip-dev
 
 RUN pecl install zip
 
-#RUN apt-get update && apt-get install -y \
+##############################################################
+# MISC
+##############################################################
+
+RUN apt-get update && apt-get install -y \
 #        wget \
 #        netcat \
 #        libicu-dev \
@@ -48,7 +56,7 @@ RUN pecl install zip
 #        libjpeg-dev \
 #        libpng-dev \
 #        libssl-dev \
-#        acl
+        acl
 #
 #
 RUN docker-php-ext-configure opcache --enable-opcache && \

@@ -37,6 +37,9 @@ if [ "${APP_ENVIRONMENT}" = "dev" ]; then
 
     chown -R $CONTAINER_USER:$CONTAINER_GROUP /home/docker
     chown -R $CONTAINER_USER:$CONTAINER_GROUP /var/www/html
+
+    setfacl -R -m u:www-data:rwx -m u:$HOST_UID:rwx -m m:rwx var/log
+    setfacl -dR -m u:www-data:rwx -m u:$HOST_UID:rwx -m m:rwx var/log
 elif [ "${APP_ENVIRONMENT}" = "test" ]; then
     php bin/console doctrine:schema:update --force --env=test
     php bin/console hautelook:fixtures:load --no-interaction --env=test
